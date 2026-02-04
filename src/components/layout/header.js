@@ -8,14 +8,11 @@ export default function Header() {
   const router = useRouter();
   const path = router.pathname;
   return (
-    <header
-      className={`fixed top-0 px-8 bg-white/20 backdrop-blur-sm w-screen shadow-lg ${path === '/survey' ? 'h-[4rem]' : 'h-[6rem]'} flex justify-center z-[999] hover:top-0
-      before:absolute  before:w-[32rem] before:aspect-square before:bg-white before:-top-[20rem] before:rounded-full before:shadow-lg
-      after:absolute after:w-full after:h-full after:bg-white/20
-      `}
-    >
-      <div className="relative flex items-center z-[10] w-[20rem] aspect-square top-4 p-12">
-        <div className="relative flex items-center w-full aspect-square">
+    <>
+      <header
+        className={`top-0 px-8 py-4 bg-white backdrop-blur-sm w-screen shadow-lg ${path === '/survey' ? 'h-[4rem]' : 'h-[6rem]'} flex justify-center z-[999] hover:top-0`}
+      >
+        <div className="relative flex items-center w-full">
           <Link href="/" passhref>
             <a>
               <Image
@@ -27,7 +24,13 @@ export default function Header() {
             </a>
           </Link>
         </div>
+      </header>
+      <div className="bg-red-500 w-full text-white p-4 sticky top-0 z-40">
+        <p className="-ft-2 font-semibold text-center">Solo en {new Date().toLocaleString('es-ES', {month: 'long'})}:
+          Envío
+          GRATIS en tu primera compra desde $20,000*</p>
       </div>
-    </header>
-  );
+    </>
+  )
+    ;
 }

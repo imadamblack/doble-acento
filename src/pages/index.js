@@ -30,57 +30,57 @@ export default function Index({lead, utm}) {
   };
 
 
-  const {hero, beneficios, alianzas, atributos, catalogo, garantias, testimonios, faqs, cta} = content;
+  const {hero, beneficios, alianzas, niveles, atributos, catalogo, garantias, testimonios, faqs, cta} = content;
 
   return (
     <>
       {/* HERO */}
       <section
         className="relative lg:aspect-[12/5] w-full flex flex-col md:justify-end items-center bg-white overflow-hidden border-b">
-        <div className="relative aspect-[5/4] md:aspect-[12/5] w-full md:absolute top-0 inset-x-0 md:bottom-0">
+        <div className="relative aspect-[4/2] lg:aspect-[12/5] w-full md:absolute top-0 inset-x-0 lg:bottom-0">
           <div
             className="hidden md:block w-full h-[12rem] pt-[80%] bottom-0 absolute bg-gradient-to-t from-black/50 via-transparent to-transparent z-10"/>
-          <div
-            className="hidden md:block w-full h-[12rem] pt-[80%] bottom-0 left-0 absolute bg-gradient-to-r from-black/60 to-transparent z-10"/>
+          {/*<div className="hidden md:block w-full h-[12rem] pt-[80%] bottom-0 left-0 absolute bg-gradient-to-r from-black/60 to-transparent z-10"/>*/}
 
-          <Image src="/landing/hero.png" layout="fill" className="object-cover object-center"/>
+          <Image src="/landing/hero.jpeg" layout="fill" className="object-cover object-center"/>
         </div>
 
         <div className="container md:text-white mx-auto z-20 py-20">
           <h1
-            className="md:w-2/3 mx-auto relative ft-9 text-center md:[text-shadow:_2px_2px_0_rgb(0_0_0_/_40%)]"
+            className="lg:w-2/3 mx-auto relative ft-7 text-center md:[text-shadow:_2px_2px_0_rgb(0_0_0_/_40%)]"
             dangerouslySetInnerHTML={{__html: hero.banner.title}}
           />
           <p
-            className="ft-4 md:w-2/3 relative mt-8 md:[text-shadow:_2px_2px_0_rgb(0_0_0_/_40%)]"
+            className="ft-4 lg:w-2/3 mx-auto relative text-center mt-8 md:[text-shadow:_2px_2px_0_rgb(0_0_0_/_40%)]"
             dangerouslySetInnerHTML={{__html: hero.banner.description}}
           />
 
         </div>
       </section>
 
-      <section className="reading-container">
-        <p className="ft-2" dangerouslySetInnerHTML={{__html: hero.content.paragraph}}/>
+      {/*<section className="reading-container">*/}
+      {/*  <p className="ft-2" dangerouslySetInnerHTML={{__html: hero.content.paragraph}}/>*/}
 
-        <div className="flex flex-col justify-start items-start mt-8">
-          <p className="ft-2 mb-8">{hero.cta.main}</p>
-          <a href="#contact" className="relative button ft-2 !w-full mb-4">
-            <span className="filter invert mr-4"><Image src="/whatsapp.svg" width={20} height={20}/></span>
-            Mándanos un Whatsapp
-          </a>
-          <p className="-ft-1">{hero.cta.second}</p>
-        </div>
-      </section>
+      {/*  <div className="flex flex-col justify-start items-start mt-8">*/}
+      {/*    <p className="ft-2 mb-8">{hero.cta.main}</p>*/}
+      {/*    <a href="#contact" className="relative button ft-2 !w-full mb-4">*/}
+      {/*      <span className="filter invert mr-4"><Image src="/whatsapp.svg" width={20} height={20}/></span>*/}
+      {/*      Mándanos un Whatsapp*/}
+      {/*    </a>*/}
+      {/*    <p className="-ft-1">{hero.cta.second}</p>*/}
+      {/*  </div>*/}
+      {/*</section>*/}
 
       {catalogo != null &&
         <>
-          <Blockbuster
-            overhead="Catálogo"
-            background={`bg-[url('/landing/catalogo.png')]`}
-            title={catalogo.banner.title}
-            description={catalogo.banner.description}
-          />
+          {/*<Blockbuster*/}
+          {/*  overhead="Catálogo"*/}
+          {/*  background={`bg-[url('/landing/catalogo.png')]`}*/}
+          {/*  title={catalogo.banner.title}*/}
+          {/*  description={catalogo.banner.description}*/}
+          {/*/>*/}
           <section id="catalogo" className="mt-20">
+            <h2 className="ft-6 text-center mb-8">{catalogo.banner.title}</h2>
             <div className="px-16">
               <div className="select md:hidden">
                 <select
@@ -133,7 +133,7 @@ export default function Index({lead, utm}) {
       <section id="beneficios">
         <Blockbuster
           overhead="Beneficios"
-          background={`bg-[url('/landing/beneficios.png')]`}
+          background={`bg-[url('/landing/beneficios.jpeg')]`}
           title={beneficios.banner.title}
           description={beneficios.banner.description}
         />
@@ -145,15 +145,9 @@ export default function Index({lead, utm}) {
                 id={`beneficio-${idx}`}
                 className="relative flex flex-col gap-8 w-full bg-white rounded-2xl shadow-lg overflow-hidden border border-neutral-100">
 
-                {/*<div className="w-full aspect-[16/9]">*/}
-                {/*  <div className="relative w-full h-full">*/}
-                {/*    <Image src={`/landing/${i.img}`} layout="fill" objectFit="cover"/>*/}
-                {/*  </div>*/}
-                {/*</div>*/}
-
                 <div className="p-20">
-                  <h3 className="ft-4 font-semibold tracking-wide flex-grow">{i.title}</h3>
-                  <p className="ft-1">{i.description}</p>
+                  <h3 className="ft-4 font-semibold flex-grow">{i.title}</h3>
+                  <p className="ft-1 mt-8" dangerouslySetInnerHTML={{__html: i.description}}/>
                 </div>
 
               </div>,
@@ -164,6 +158,34 @@ export default function Index({lead, utm}) {
           <h3 className="text-center">{beneficios.cta.main}</h3>
           <Link href="#contact">
             <a onClick={() => goToContact('benefits')} className="button !w-full mb-4">Mándanos un Whatsapp</a>
+          </Link>
+          <p className="-ft-1">{hero.cta.second}</p>
+        </div>
+      </section>
+
+      {/* NIVELES */}
+      <section id="niveles">
+        <Blockbuster
+          overhead="niveles"
+          background={`bg-[url('/landing/niveles.jpeg')]`}
+          title={niveles.banner.title}
+          description={niveles.banner.description}
+        />
+        <div className="container grid md:grid-cols-3 gap-8 items-stretch my-20">
+
+          {niveles.content.items.map((i, idx) =>
+            <div
+              className="flex flex-col flex-grow gap-4 p-12 rounded-2xl bg-white shadow-lg border border-neutral-200">
+              <h3 className="font-semibold w-full pb-4 border-b-2 border-brand-2">{i.title}</h3>
+              <p className="-ft-2 flex-grow" dangerouslySetInnerHTML={{__html: i.description}}/>
+            </div>,
+          )}
+        </div>
+
+        <div className="reading-container mt-20">
+          <h3 className="text-center">{niveles.cta.main}</h3>
+          <Link href="#contact">
+            <a onClick={() => goToContact('niveles')} className="button !w-full mb-4">Mándanos un Whatsapp</a>
           </Link>
           <p className="-ft-1">{hero.cta.second}</p>
         </div>
@@ -254,19 +276,15 @@ export default function Index({lead, utm}) {
       <section id="testimonios">
         <Blockbuster
           overhead="Testimonios"
-          background={`bg-[url('/landing/testimonios.png')]`}
+          background={`bg-[url('/landing/testimonios.jpeg')]`}
           title={testimonios.banner.title}
           description={testimonios.banner.description}
         />
         <div className="container my-20">
-          <div className="grid md:grid-cols-3 gap-16 items-stretch">
-            {testimonios.content.items.map((i, idx) =>
-              <div className="relative flex flex-col p-12 pt-32 border border-brand-1 shadow-md rounded-2xl">
-                <p className="!text-[16rem] absolute -top-28 -left-2 material-icons">format_quote</p>
-                <p className="ft-2 font-medium flex-grow my-20">{i.description}</p>
-                <p className="ft-1 text-right">
-                  {i.title}
-                </p>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
+            {[1,2,3,4,5,6,7,8].map((i) =>
+              <div className="relative flex aspect-[3/4]">
+               <Image src={`/landing/testimonios/testimonio0` + i + `.png`} layout="fill"/>
               </div>,
             )}
           </div>
@@ -285,7 +303,7 @@ export default function Index({lead, utm}) {
       <section id="faqs">
         <Blockbuster
           overhead="FAQs"
-          background={`bg-[url('/landing/faqs.png')]`}
+          background={`bg-[url('/landing/faqs.jpeg')]`}
           title={faqs.banner.title}
           description={faqs.banner.description}
         />
@@ -316,7 +334,7 @@ export default function Index({lead, utm}) {
       {garantias != null &&
         <Blockbuster
           overhead="Garantías"
-          background={`bg-[url('/landing/garantias.png')] bg-bottom`}
+          background={`bg-[url('/landing/garantias.jpg')] bg-bottom`}
           title={garantias.banner.title}
           description={garantias.banner.description}
         />

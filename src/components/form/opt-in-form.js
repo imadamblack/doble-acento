@@ -118,6 +118,26 @@ export default function OptInForm({lastClick = '', utm = {}}) {
           className={errors.city && '!bg-red-200'}
           placeholder="Ciudad o localidad"/>
 
+        <Select
+          options={[
+            {value: 'interiorista', name: 'Interiorista / Decorador'},
+            {value: 'arquitecto', name: 'Arquitecto'},
+            {value: 'desarrollador', name: 'Desarrollador inmobiliario'},
+            {value: 'tienda', name: 'Tienda de decoración'},
+            {value: 'muebleria', name: 'Mueblería'},
+            {value: 'residencial', name: 'Proyecto residencial'},
+            {value: 'comercial', name: 'Proyecto comercial'},
+            {value: 'hotel', name: 'Hotelería'},
+            {value: 'restaurant', name: 'Restaurant / Cafetería'},
+            {value: 'regalos', name: 'Regalos corporativos'},
+            {value: 'otro', name: 'Otro'},
+          ]}
+          name="type"
+          inputOptions={{required: true}}
+          placeholder="Elije la opción que te describa mejor"
+          className={`rounded-md px-6 py-4 bg-white ${errors.state && '!bg-red-200'}`}
+        />
+
         <button
           disabled={sending}
           className={`w-full ${sending ? '!bg-transparent' : 'hover:!bg-brand-3'}`}
