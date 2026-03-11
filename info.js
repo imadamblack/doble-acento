@@ -7,9 +7,9 @@ export const info = {
     recipients: [""],
     subject: "Nuevo prospecto ",
   },
-  phoneNumber: "+5213334066841",
+  phoneNumber: "+5213318930178",
   whatsapp: {
-    value: "+5213334066841",
+    value: "+5213318930178",
     message: "Buen día, quiero cotizar unos artículos de decoración",
   },
   social: {

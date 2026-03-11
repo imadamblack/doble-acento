@@ -5,7 +5,7 @@ export const mexicanStates = [
   {value: 'campeche', name: 'Campeche', code: 'CAMP'},
   {value: 'chiapas', name: 'Chiapas', code: 'CHIS'},
   {value: 'chihuahua', name: 'Chihuahua', code: 'CHIH'},
-  {value: 'ciudaddemexico', name: 'Ciudad de México', code: 'CDMX'},
+  {value: 'cdmx', name: 'Ciudad de México', code: 'CDMX'},
   {value: 'coahuila', name: 'Coahuila', code: 'COAH'},
   {value: 'colima', name: 'Colima', code: 'COL'},
   {value: 'durango', name: 'Durango', code: 'DGO'},
