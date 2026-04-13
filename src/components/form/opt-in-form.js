@@ -6,8 +6,7 @@ import { getCookie, setCookie } from 'cookies-next';
 import { useState } from 'react';
 import { emailRegExp, restrictNumber } from '../../utils/formValidators';
 import fbEvent, { gtagSendEvent } from '../../services/fbEvents';
-import { Select } from './formAtoms';
-import { mexicanStates } from '../../catalogs/mexican-states';
+import { Checkbox, Select } from './formAtoms';
 
 export default function OptInForm({lastClick = '', utm = {}}) {
   const [sending, setSending] = useState(false);
@@ -39,29 +38,21 @@ export default function OptInForm({lastClick = '', utm = {}}) {
       // Send FB Event
       .then(({id}) => {
         const userData = {email: data.email, phone: data.phone, externalID: id};
-        fbEvent('Lead', userData);
-        gtagSendEvent('KTQ4CPClh9MbEP3jsKxC', userData);
+        fbEvent('CompleteRegistration', userData);
+        gtagSendEvent('', userData);
         setCookie('lead', {...data, id});
 
-        const forwardLink = document.createElement('a');
-        forwardLink.href = `https://wa.me/${info.whatsapp.value}`;
-        forwardLink.target = '_blank';
-        forwardLink.click();
-
-        router.push('/thankyou');
-
-        // router.push(`/survey?id=${id}`);
+        if (['tienda', 'proyectos', 'merchandising'].includes(data.type)) {
+          router.push(`/survey?id=${id}`);
+        } else {
+          router.push('/not-elegible');
+        }
       })
       .catch(() => {
         const userData = {email: data.email, phone: data.phone, externalID: ''};
-        fbEvent('Lead', userData);
-        gtagSendEvent('KTQ4CPClh9MbEP3jsKxC', userData);
+        fbEvent('CompleteRegistration', userData);
+        gtagSendEvent('', userData);
         setCookie('lead', {...data});
-
-        const forwardLink = document.createElement('a');
-        forwardLink.href = `https://wa.me/${info.whatsapp.value}`;
-        forwardLink.target = '_blank';
-        forwardLink.click();
 
         router.push('/thankyou');
       });
@@ -94,6 +85,7 @@ export default function OptInForm({lastClick = '', utm = {}}) {
           )}
           className={errors.email && '!bg-red-200'}
           placeholder="Correo electrónico"/>
+
         <input
           {...register(
             'phone',
@@ -102,40 +94,20 @@ export default function OptInForm({lastClick = '', utm = {}}) {
           className={errors.phone && '!bg-red-200'}
           onKeyDown={restrictNumber}
           placeholder="Numero de WhatsApp"/>
-        <Select
-          options={mexicanStates}
-          name="state"
-          inputOptions={{required: true}}
-          placeholder="Selecciona un estado"
-          className={`rounded-md px-6 py-4 bg-white ${errors.state && '!bg-red-200'}`}
-        />
-
-        <input
-          {...register(
-            'city',
-            {required: true},
-          )}
-          className={errors.city && '!bg-red-200'}
-          placeholder="Ciudad o localidad"/>
 
         <Select
           options={[
-            {value: 'interiorista', name: 'Interiorista / Decorador'},
-            {value: 'arquitecto', name: 'Arquitecto'},
-            {value: 'desarrollador', name: 'Desarrollador inmobiliario'},
-            {value: 'tienda', name: 'Tienda de decoración'},
-            {value: 'muebleria', name: 'Mueblería'},
-            {value: 'residencial', name: 'Proyecto residencial'},
-            {value: 'comercial', name: 'Proyecto comercial'},
-            {value: 'hotel', name: 'Hotelería'},
-            {value: 'restaurant', name: 'Restaurant / Cafetería'},
-            {value: 'regalos', name: 'Regalos corporativos'},
+            {value: 'tienda', name: 'Vender en mi mueblería/tienda'},
+            {value: 'proyectos', name: 'Aplicar en proyectos de interiorismo'},
+            {value: 'merchandising', name: 'Regalos corporativos'},
+            {value: 'personal-negocio', name: 'Decorar mi negocio'},
+            {value: 'personal-casa', name: 'Decorar mi casa'},
             {value: 'otro', name: 'Otro'},
           ]}
           name="type"
           inputOptions={{required: true}}
-          placeholder="Elije la opción que te describa mejor"
-          className={`rounded-md px-6 py-4 bg-white ${errors.state && '!bg-red-200'}`}
+          placeholder="Cuál es tu principal interés?"
+          className={`rounded-md px-6 py-4 bg-white ${errors.type && '!bg-red-200'}`}
         />
 
         <button
@@ -144,7 +116,7 @@ export default function OptInForm({lastClick = '', utm = {}}) {
         >{
           !sending
             ? 'Mándanos un WhatsApp →'
-            : <span className="material-symbols-outlined animate-spin">progress_activity</span>
+            : <span className="material-symbols-outlined !text-brand-5 animate-spin">progress_activity</span>
         }</button>
 
         <div className="mt-4">

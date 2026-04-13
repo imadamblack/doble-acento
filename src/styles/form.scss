@@ -18,21 +18,31 @@ label {
   @apply flex mt-6 mb-2;
 }
 
-input[type=radio] {
+input[type=radio], input[type=checkbox] {
   display: none;
 }
 
-input[type=radio] + label {
+input[type=radio] + label, input[type=checkbox] + label {
   @extend .ft-0;
-  @apply flex w-full py-8 px-12 mt-0 border rounded-2xl
-  text-left font-semibold
+  @apply flex w-full p-8 mt-0 border-2 rounded-2xl
+  text-left
   justify-start items-center
   cursor-pointer
   bg-brand-1/5;
 }
 
-input[type=radio]:checked + label {
-  @apply bg-yellow-600 text-white border-2 border-yellow-200;
+input[type=radio] + label:before, input[type=checkbox] + label:before {
+  content: '';
+  @apply flex mr-4 w-6 h-6 border border-brand-1;
+}
+
+input[type=radio]:checked + label, input[type=checkbox]:checked + label {
+  @apply border-yellow-500;
+}
+
+input[type=radio]:checked + label:before, input[type=checkbox]:checked + label:before {
+  content: '';
+  @apply bg-yellow-500;
 }
 
 select {

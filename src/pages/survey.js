@@ -2,248 +2,133 @@
 import { useForm, FormProvider } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { setCookie, getCookie } from 'cookies-next';
+import { setCookie } from 'cookies-next';
 import StepRenderer from '../components/form/stepRenderer';
 import fbEvent from '../services/fbEvents';
 import { gtagSendEvent } from '../services/fbEvents';
-import Image from 'next/image';
 import { info } from '../../info';
-import { content } from '../../content';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import logo from '../../public/logo.png';
+import { mexicanStates } from '../catalogs/mexican-states';
 
-const Intro = () => <motion.div
-  key="intro"
-  initial={{opacity: 0}}
-  animate={{opacity: 1}}
-  exit={{opacity: 0}}
-  transition={{duration: 0.5}}
-  className="bg-[url('/landing/hero.jpg')] bg-center bg-cover relative flex-grow flex flex-col items-center justify-end px-4 py-12"
->
-  <div className="absolute mx-auto inset-x-0 w-[32rem] h-[10rem] top-[4rem] brightness-200">
-    <Image src={logo} layout="fill" className="object-contain"/>
-  </div>
-
-  <div className="absolute bg-gradient-to-t from-brand-1 to-transparent bottom-0 h-[60dvh] w-full "/>
-
-  <div className="container flex flex-col justify-center items-center z-10">
-    <h1 className="ft-11 text-white font-semibold my-12 text-center">{content.hero.banner.title}</h1>
-    <p className="ft-4 font-medium text-white text-center">En menos de un minuto sabrás si tienes algo que vale más de lo que esperas</p>
-
-    <div className="w-full max-w-[50rem] h-12 p-2 mt-16 mb-4 bg-gray-200 rounded-full overflow-hidden">
-      <motion.div
-        initial={{width: '0%'}}
-        animate={{width: '100%'}}
-        transition={{duration: 5, ease: 'easeInOut'}}
-        className="h-full bg-gradient-to-br from-blue-800 to-indigo-500 rounded-2xl"
-      />
-    </div>
-    <p className="-ft-1 flex items-center text-center text-gray-100">
-      Cargando
-      <span
-        className="-ft-1 material-symbols-outlined animate-spin ml-4">progress_activity</span>
-    </p>
-  </div>
-</motion.div>;
-
-const setFormSteps = ({fullName, phone}) => ([
+const setFormSteps = ({type = 'tienda'}) => ([
   {
-    type: 'radio',
-    name: 'pieza',
-    title: '¿Qué tipo de pieza quieres vender?',
-    inputOptions: {required: 'Selecciona una por favor'},
-    options: [
-      // {
-      //   value: 'reloj',
-      //   label: 'Reloj de lujo (Rolex, Omega, Cartier, etc...)',
-      // },
-      {
-        value: 'joyeria-oro',
-        label: 'Joyería de oro',
-      },
-      {
-        value: 'joyeria-plata',
-        label: 'Joyería de plata',
-      },
-      // {
-      //   value: 'piedras',
-      //   label: 'Piezas con diamantes o piedras preciosas',
-      // },
-      {
-        value: 'oro',
-        label: 'Centenarios o monedas de oro',
-      },
-      {
-        value: 'plata',
-        label: 'Onzas o artículos de plata',
-      },
-    ],
-    cols: 1,
+    type: 'text',
+    name: 'company',
+    title: '¿Cuál es el nombre de tu negocio?',
+    inputOptions: {required: true},
+    placeholder: 'Nombre de tu negocio',
   },
-  // {
-  //   type: 'radio',
-  //   name: 'estado',
-  //   title: '¿Cuál es el estado general de la pieza?',
-  //   inputOptions: {required: 'Selecciona una por favor'},
-  //   options: [
-  //     {
-  //       value: 'como-nuevo',
-  //       label: 'Perfecto / como nueva',
-  //     },
-  //     {
-  //       value: 'normal',
-  //       label: 'Buen estado con uso normal',
-  //     },
-  //     {
-  //       value: 'detalles',
-  //       label: 'Con detalles o desgaste visible',
-  //     },
-  //     {
-  //       value: 'no-sabe',
-  //       label: 'Maltratada',
-  //     },
-  //   ],
-  //   cols: 1,
-  // },
   {
     type: 'radio',
-    name: 'motivo',
-    title: '¿Por qué te interesa vender estas piezas?',
+    name: 'companySize',
+    title: '¿Cuál opción describe mejor tu negocio?',
     inputOptions: {required: 'Selecciona una por favor'},
     options: [
       {
-        value: 'liquidez',
-        label: 'Necesito liquidez',
+        value: type === 'tienda' ? '1-punto-venta' : '1-proyecto',
+        label: type === 'tienda' ? 'Tengo un punto de venta' : 'Tengo un proyecto',
       },
       {
-        value: 'compra',
-        label: 'Quiero comprar otras piezas',
+        value: type === 'tienda' ? 'varios-puntos-venta' : 'varios-proyectos',
+        label: type === 'tienda' ? 'Tengo varios puntos de venta' : 'Trabajo varios proyectos',
       },
       {
-        value: 'sin-uso',
-        label: 'Solo porque no las uso',
+        value: 'expansion',
+        label: 'Quiero abrir o expandirme',
       },
       {
-        value: 'valoracion',
-        label: 'Solo quiero una valoración sin compromiso',
+        value: 'por-abrir',
+        label: type === 'tienda' ? 'Aún no tengo punto de venta' : 'Estoy por emprender',
       },
     ],
     cols: 1,
   },
   {
-    type: 'checkpoint',
-    name: 'checkpoint-1',
-    autoAdvance: true,
-    render: () => (
-      <div className={`relative flex-grow`}>
-        <p className="ft-6 sans text-center font-bold">{content.testimonios.banner.title}</p>
-        <div className="relative w-full my-8 pt-[80%] rounded-2xl overflow-hidden">
-          <Image src="/landing/testimonios.jpg" layout="fill" objectFit="cover"/>
-        </div>
-        <div className="container my-40">
-          <div className="grid grid-cols-1 gap-16 items-stretch">
-            {content.testimonios.content.items.map((i, idx) =>
-              <div className="relative flex flex-col p-12 pt-32 border border-yellow-500 shadow-md">
-                <p className="!text-[16rem] absolute -top-28 -left-2 material-icons">format_quote</p>
-                <p className="ft-2 font-medium flex-grow my-20">{i.description}</p>
-                <p className="ft-1 text-right">
-                  {i.title}
-                </p>
-              </div>,
-            )}
-          </div>
-        </div>
-      </div>
-    ),
+    type: 'checkbox',
+    name: 'categories',
+    title: '¿Qué categorías te interesan?',
+    description: 'Selecciona una o varias',
+    inputOptions: {required: 'Selecciona al menos una'},
+    options: [
+      {value: 'jarrones', name: 'Jarrones'},
+      {value: 'floreros', name: 'Floreros'},
+      {value: 'lamparas', name: 'Lámparas'},
+      {value: 'plantas-macetas', name: 'Plantas y macetas'},
+      {value: 'nauticos', name: 'Náuticos'},
+      {value: 'espejos', name: 'Espejos'},
+      {value: 'cuadros', name: 'Cuadros'},
+      {value: 'mesas', name: 'Mesas'},
+      {value: 'esculturas', name: 'Esculturas y figuras'},
+      {value: 'otros', name: 'Otros'},
+    ],
+    cols: 2,
   },
   {
     type: 'radio',
-    name: 'valoracion',
-    title: '¿Has recibido una valoración antes?',
+    name: 'temperature',
+    title: '¿En qué etapa estás hoy?',
     inputOptions: {required: 'Selecciona una por favor'},
     options: [
       {
-        value: 'con-valoracion-previa',
-        label: 'Sí pero no me convenció',
+        value: 'hot',
+        label: 'Necesito mercancía pronto',
       },
       {
-        value: 'comparando-opciones',
-        label: 'Sí, estoy comparando',
+        value: 'mid-near',
+        label: 'Tengo pedido planeado para el próximo mes',
       },
       {
-        value: 'primera-vez',
-        label: 'No, apenas estoy buscando',
+        value: 'mid',
+        label: 'Estoy comparando opciones',
+      },
+      {
+        value: 'cold',
+        label: 'Solo explorando por ahora',
       },
     ],
     cols: 1,
   },
   {
     type: 'radio',
-    name: 'inmediatez',
-    title: '¿Qué tanta urgencia tienes por vender esta pieza?',
+    name: 'agreement',
+    title: '¿Tu primera compra estaría dentro de los $20,000 MXN?',
+    description: 'Este es el mínimo de activación como distribuidor',
     inputOptions: {required: 'Selecciona una por favor'},
     options: [
       {
-        value: 'inmediato',
-        label: 'Lo antes posible!',
+        value: 'si',
+        label: 'Sí, sin problema',
       },
       {
-        value: 'no-sabe',
-        label: 'Más adelante, estoy explorando',
+        value: 'tal-vez',
+        label: 'Depende del catálogo',
       },
       {
-        value: 'depende',
-        label: 'Depende de la valoración',
+        value: 'no',
+        label: 'Por ahora no',
       },
     ],
     cols: 1,
   },
-  // {
-  //   type: 'radio',
-  //   name: 'sucursal',
-  //   title: '¿Qué sucursal te queda mejor para traer tus piezas?',
-  //   inputOptions: {required: 'Selecciona una por favor'},
-  //   options: [
-  //     {
-  //       value: 'polanco',
-  //       label: 'Plaza Polanco',
-  //     },
-  //     {
-  //       value: 'cuspide',
-  //       label: 'La Cúspide Sky Mall',
-  //     },
-  //   ],
-  //   cols: 1,
-  // },
   {
-    type: 'opt-in',
-    title: 'Ok, estamos listos para recibirte en nuestra boutique',
-    description: 'Compárteme tu nombre y WhatsApp para programar tu valoración presencial.',
-    fields: [
-      {
-        type: 'text',
-        name: 'fullName',
-        title: 'Tu nombre completo',
-        inputOptions: {value: fullName, required: 'Cómo te llamas?'},
-      },
-      {
-        type: 'tel',
-        name: 'phone',
-        title: 'Tu WhatsApp',
-        inputOptions: {
-          value: phone,
-          required: 'Cuál es tu WhatsApp?',
-          maxLength: {value: 10, message: 'Tu tel a 10 digitos'},
-          minLength: {value: 10, message: 'Tu tel a 10 digitos'},
-        },
-      },
-    ],
+    type: 'select',
+    name: 'state',
+    title: '¿En qué estado de la república se encuentra tu negocio?',
+    options: mexicanStates,
+    inputOptions: {required: true},
+    placeholder: 'Selecciona uno',
+  },
+  {
+    type: 'text',
+    name: 'city',
+    title: '¿Y en qué ciudad?',
+    inputOptions: {required: true},
+    placeholder: 'Ciudad',
   },
 ]);
 
 export default function Survey({lead, utm}) {
-  const [showIntro, setShowIntro] = useState(true);
   const [showOutro, setShowOutro] = useState(false);
   const [formStep, setFormStep] = useState(0);
   const [inputError, setInputError] = useState(null);
@@ -258,16 +143,6 @@ export default function Survey({lead, utm}) {
   } = methods;
   const router = useRouter();
 
-  useEffect(() => {
-    if (showIntro) {
-      const timer = setTimeout(() => {
-        setShowIntro(false);
-      }, 5000);
-
-      return () => clearTimeout(timer);
-    }
-    window.scrollTo(0, 0);
-  }, [showIntro]);
   useEffect(() => {
     const current = formSteps[formStep];
 
@@ -317,7 +192,7 @@ export default function Survey({lead, utm}) {
   const onSubmit = async (data) => {
     setSending(true);
     try {
-      data.whatsapp = '521' + data.phone.replace(/^(MX)?\+?(52)?\s?0?1?|\s|\(|\)|-|[a-zA-Z]/g, '');
+      data.whatsapp = '521' + data.phone?.replace(/^(MX)?\+?(52)?\s?0?1?|\s|\(|\)|-|[a-zA-Z]/g, '');
 
       const payload = {...lead, ...data, ...utm};
 
@@ -331,13 +206,12 @@ export default function Survey({lead, utm}) {
 
       fbEvent(
         'Lead',
-        {phone: data.phone, externalID: res.id},
+        {phone: payload.phone, externalID: res.id},
       );
       gtagSendEvent(
-        '_MzdCKfprrEbEP6klOBB',
-        {fullName: data.fullName, phone: data.whatsapp}
+        'KTQ4CPClh9MbEP3jsKxC',
+        {fullName: payload.fullName, phone: payload.whatsapp}
       );
-
 
       setCookie('lead', {...data, id: res.id});
 
@@ -354,10 +228,7 @@ export default function Survey({lead, utm}) {
     <>
       <div className="relative flex flex-col flex-grow bg-gradient-to-t from-blue-50 to-white">
         <AnimatePresence mode="wait">
-          {showIntro && (
-            <Intro/>
-          )}
-          {!showIntro && !showOutro && (
+          {!showOutro && (
             <motion.div
               key="survey"
               initial={{opacity: 0}}
@@ -419,7 +290,7 @@ export default function Survey({lead, utm}) {
                           className="mt-auto !w-full"
                         >
                           {sending && <span className="animate-spin mr-4">+</span>}
-                          {formStep === lastInputIndex ? 'Continuar' : 'Siguiente'}
+                          {formStep === lastInputIndex ? 'Enviar' : 'Siguiente'}
                         </button>
                       </div>
                     </form>
@@ -470,14 +341,24 @@ export async function getServerSideProps(ctx) {
       : cookies.utm ?? null;
 
   const { lead } = cookies;
+  const id = query?.id ?? lead?.id;
+  console.log(id);
+
+  if (!id || id === 'undefined' || id === '') {
+    return {
+      redirect: { permanent: false, destination: '/#contact' },
+    };
+  }
 
   return {
     props: {
       lead: {
+        id: lead?.id,
         fullName: lead?.fullName ?? '',
         phone: lead?.phone ?? '',
         whatsapp: lead?.whatsapp ?? '',
         sheetRow: lead?.sheetRow ?? '',
+        type: lead?.type ?? '',
       },
       utm,
     },
