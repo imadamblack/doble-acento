@@ -11,7 +11,6 @@ export default function StepRenderer({
   register,
 }) {
   if (index !== currentStep) return null;
-  console.log(step.name, errors[step.name]?.message);
 
   const commonText = (
     <div className="mb-8">

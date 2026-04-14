@@ -139,7 +139,6 @@ export default function Survey({lead, utm}) {
     register,
     handleSubmit,
     formState: {errors},
-    watch,
   } = methods;
   const router = useRouter();
 
@@ -163,17 +162,14 @@ export default function Survey({lead, utm}) {
     }
   }, [formStep]);
 
-  let formSteps = setFormSteps({fullName: lead.fullName, phone: lead.phone});
+  let formSteps = setFormSteps({type: lead.type});
 
   const lastInputIndex = formSteps.reduce((lastIndex, step, i) => {
     return step.type !== 'checkpoint' ? i : lastIndex;
   }, 0);
+
   const handleNext = async () => {
     const currentStep = formSteps[formStep];
-
-    if (currentStep.name === 'user') {
-      formSteps = setFormSteps({fullName: lead.fullName, phone: lead.phone, user: watch('user')});
-    }
 
     if (currentStep.type === 'checkpoint') {
       return setFormStep((prev) => Math.min(prev + 1, formSteps.length - 1));
@@ -219,6 +215,7 @@ export default function Survey({lead, utm}) {
 
     } catch (err) {
       console.error('Error al enviar formulario:', err);
+      await router.push('/thankyou');
     } finally {
       setSending(false);
     }
@@ -353,7 +350,7 @@ export async function getServerSideProps(ctx) {
   return {
     props: {
       lead: {
-        id: lead?.id,
+        id,
         fullName: lead?.fullName ?? '',
         phone: lead?.phone ?? '',
         whatsapp: lead?.whatsapp ?? '',
